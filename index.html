@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FF4D00">
+<title>CAMPUSONE — Join the Waitlist</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Epilogue:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root{
+  /* Theme Variables (Default Dark) */
+  --bg:#0D0D0D;
+  --bg2:#141414;
+  --bg3:#1C1C1C;
+  --text:#ffffff;
+  --text-muted:#888888;
+  --text-dark:#555555;
+  --text-darker:#444444;
+  --border:rgba(255,255,255,0.08);
+
+  /* Brand Constants */
+  --fire:#FF4D00;
+  --energy:#FFCE00;
+  --electric:#1A1AFF;
+  --success:#00C864;
+  --error:#FF3366;
+  --ff-d:'Syne',sans-serif;
+  --ff-b:'Epilogue',sans-serif;
+}
+
+/* Light Theme Variables */
+.light-theme {
+  --bg:#F3F4F6;
+  --bg2:#FFFFFF;
+  --bg3:#E8E9EC;
+  --text:#111111;
+  --text-muted:#4A4A4A;
+  --text-dark:#6B7280;
+  --text-darker:#9CA3AF;
+  --border:rgba(0,0,0,0.1);
+}
+
+body, .form-card, .stat-chip, .pos-card, .ref-card, .rewards-card, .lb-card, .lb-preview, .inp, .share-btn, .nav-logo, .nav-counter, .feat-icon, .reward-icon, .theme-toggle-btn {
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--ff-b);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--fire)}
+
+/* PAGES */
+.page{display:none;min-height:100vh}
+.page.show{display:block}
+
+/* ══ HERO PAGE ══ */
+#p-hero{position:relative;overflow:hidden}
+.hero-bg{position:fixed;inset:0;z-index:0;background:var(--bg)}
+.hero-grid{position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(255,77,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,77,0,0.04) 1px,transparent 1px);background-size:52px 52px}
+.hero-glow{position:fixed;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(255,77,0,0.14),transparent 70%);top:30%;left:50%;transform:translate(-50%,-50%);z-index:0;animation:breathe 5s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.1)}}
+.hero-glow2{position:fixed;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(26,26,255,0.08),transparent 70%);bottom:10%;right:5%;z-index:0}
+
+.hero-content{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:24px 20px 40px}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 0 32px}
+.nav-logo{font-family:var(--ff-d);font-size:1.2rem;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center}
+.nav-logo span{color:var(--fire)}
+.nav-counter{background:rgba(255,77,0,0.1);border:1px solid rgba(255,77,0,0.2);border-radius:100px;padding:6px 14px;font-size:0.72rem;font-weight:700;color:var(--fire);display:none;align-items:center;gap:6px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--fire);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+/* THEME TOGGLE BUTTON */
+.theme-toggle-btn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  /* Always a visible, contrasted color in both themes */
+  color: var(--text);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.theme-toggle-btn:hover {
+  background: rgba(255,77,0,0.12);
+  border-color: rgba(255,77,0,0.4);
+  color: var(--fire);
+  transform: scale(1.05);
+}
+.theme-toggle-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.2px;
+  stroke: currentColor; 
+  fill: none;
+}
+/* --- ICON TOGGLING --- */
+
+/* Default state (Dark Mode / Root state) */
+.sun-icon { display: inline-flex; }
+.moon-icon { display: none; }
+
+/* Light Theme overrides */
+.light-theme .sun-icon { display: none; }
+.light-theme .moon-icon { display: inline-flex; }
+
+
+
+/* In dono ka jo bhi main parent wrapper hai (e.g., .hero-section ya .main-container) */
+.hero-main-layout {
+  display: flex;
+  align-items: center;       /* Is se left aur right dono elements vertically center ho jayenge */
+  justify-content: space-between; /* Dono ke beech ka gap maintain karne ke liye */
+  gap: 40px;                 /* Left aur right sides ke beech ka gap */
+  width: 100%;
+  max-width: 1200px;         /* Aapke design ke mutabiq */
+  margin: 0 auto;
+}
+
+/* Make sure ke left aur right sections wrapper ke andar sahi space le rahe hon */
+.hero-left-block {
+  flex: 1;
+}
+
+.form-card {
+  flex: 1;
+  max-width: 450px;          
+  margin-bottom: 0;   
+}
+
+/* HERO TEXT */
+.hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,77,0,0.08);border:1px solid rgba(255,77,0,0.2);border-radius:100px;padding:6px 14px;font-size:0.7rem;font-weight:700;color:var(--fire);margin-bottom:20px;letter-spacing:.5px}
+.hero-h1{font-family:var(--ff-d);font-size:clamp(2.2rem,8vw,3.5rem);font-weight:800;letter-spacing:2px;line-height:1;margin-bottom:16px}
+.hero-h1 .fire{color:var(--fire)}
+.hero-sub{font-size:0.9rem;color:var(--text-muted);line-height:1.7;margin-bottom:28px;max-width:400px}
+
+/* STATS */
+.stats-row{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap}
+.stat-chip{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;flex:1;min-width:0;overflow:hidden}
+.stat-num{font-family:var(--ff-d);font-size:clamp(0.85rem,2.5vw,0.5rem);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat-lbl{font-size:0.62rem;font-weight:600;color:var(--text-dark);text-transform:uppercase;letter-spacing:0.8px;line-height:1.3}
+
+/* FORM */
+.form-card{background:var(--bg2);border-radius:20px;padding:24px;border:1px solid var(--border);margin-bottom:20px}
+.form-title{font-family:var(--ff-d);font-size:1rem;font-weight:800;margin-bottom:6px;letter-spacing:-.3px}
+.form-sub{font-size:0.78rem;font-weight:500;color:var(--text-muted);margin-bottom:18px;line-height:1.5}
+.input-wrap{position:relative;margin-bottom:12px}
+.inp{width:100%;background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,77,0,0.15);border-radius:12px;padding:14px 16px;color:var(--text);font-family:var(--ff-b);font-size:0.9rem;outline:none;transition:border-color .2s, box-shadow .2s;-webkit-appearance:none}
+.inp:focus{border-color:var(--fire);box-shadow:0 0 0 3px rgba(255,77,0,0.1)}
+.inp:disabled{opacity:0.5;cursor:not-allowed}
+.inp::placeholder{color:var(--text-darker)}
+.inp-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#444;pointer-events:none;display:flex;align-items:center;justify-content:center;transition:color .2s ease}
+.inp-icon svg{width:100%;height:100%;stroke-width:2px}
+.inp:focus ~ .inp-icon{color:var(--fire)}
+select.inp{cursor:pointer}
+select.inp option{background:var(--bg3)}
+.btn-join{width:100%;background:var(--fire);color:#fff;font-family:var(--ff-d);font-weight:800;font-size:1rem;padding:16px;border-radius:14px;border:none;cursor:pointer;transition:all .2s;letter-spacing:-.3px;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px}
+.btn-join:hover:not(:disabled){opacity:.9;transform:scale(1.01)}
+.btn-join:active:not(:disabled){transform:scale(.97)}
+.btn-join:disabled{opacity:0.6;cursor:not-allowed}
+.form-note{text-align:center;font-size:0.68rem;color:var(--text-darker);margin-top:10px}
+.form-note span{color:var(--fire)}
+
+/* FEATURES */
+.features-title{font-family:var(--ff-d);font-size:1rem;font-weight:800;margin-bottom:14px;letter-spacing:-.3px}
+.feature-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.feat-icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.feat-icon svg{width:18px;height:18px;stroke-width:2px}
+.feat-text{}
+.feat-name{font-size:0.84rem;font-weight:700;margin-bottom:3px;color:var(--text)}
+.feat-desc{font-size:0.76rem;font-weight:400;color:var(--text-muted);line-height:1.55}
+
+/* LEADERBOARD PREVIEW */
+.lb-preview{background:var(--bg2);border-radius:16px;padding:16px;border:1px solid var(--border);margin-bottom:20px}
+.lb-preview-title{font-size:0.67rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-dark);margin-bottom:12px;font-weight:700}
+.lb-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.lb-row:last-child{border-bottom:none}
+.lb-rk{font-family:var(--ff-d);font-size:.85rem;font-weight:800;min-width:24px}
+.lb-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.lb-nm{flex:1;font-size:.8rem;font-weight:600;color:var(--text)}
+.lb-sc{font-size:.74rem;font-weight:700;color:var(--fire)}
+
+/* ══ SUCCESS PAGE ══ */
+#p-success{max-width:480px;margin:0 auto;padding:24px 20px 60px;position:relative;z-index:1}
+.success-nav{display:flex;align-items:center;justify-content:space-between;padding-bottom:32px}
+
+.success-hero{text-align:center;padding:20px 0 28px;position:relative}
+.success-icon{font-size:3.5rem;display:block;margin-bottom:14px;animation:bounceIn .6s ease}
+@keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+.success-h1{font-family:var(--ff-d);font-size:1.8rem;font-weight:800;letter-spacing:-.8px;margin-bottom:6px;line-height:1.1}
+.success-h1 span{color:var(--fire)}
+.success-sub{font-size:0.84rem;font-weight:400;color:var(--text-muted);line-height:1.65}
+
+/* POSITION CARD */
+.pos-card{background:linear-gradient(135deg,#FF4D00,#FF8800,#FFCE00);border-radius:20px;padding:24px;margin-bottom:16px;text-align:center;position:relative;overflow:hidden}
+.pos-card::before{content:'';position:absolute;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.08);top:-70px;right:-50px}
+.pos-card::after{content:'';position:absolute;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.06);bottom:-40px;left:-30px}
+.pos-label{font-size:.65rem;text-transform:uppercase;letter-spacing:2px;opacity:.8;margin-bottom:8px;position:relative;z-index:1}
+.pos-num{font-family:var(--ff-d);font-size:3.5rem;font-weight:800;line-height:1;position:relative;z-index:1}
+.pos-sub{font-size:.75rem;opacity:.8;margin-top:6px;position:relative;z-index:1}
+
+/* REFERRAL CARD */
+.ref-card{background:var(--bg2);border-radius:16px;padding:20px;border:1px solid var(--border);margin-bottom:14px}
+.ref-title{font-family:var(--ff-d);font-size:.95rem;font-weight:800;margin-bottom:6px}
+.ref-sub{font-size:.78rem;font-weight:400;color:var(--text-muted);margin-bottom:14px;line-height:1.6}
+.ref-link-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ref-link-text{flex:1;font-size:.78rem;color:var(--fire);font-family:monospace;word-break:break-all}
+.ref-copy-btn{background:var(--fire);color:#fff;font-size:.72rem;font-weight:700;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0}
+.ref-copy-btn:active{transform:scale(.95)}
+.share-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.share-btn{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s}
+.share-btn:hover{border-color:var(--fire)}
+.share-btn:active{transform:scale(.96)}
+
+/* REWARDS TABLE */
+.rewards-card{background:var(--bg2);border-radius:16px;padding:20px;border:1px solid var(--border);margin-bottom:14px}
+.rewards-title{font-family:var(--ff-d);font-size:.95rem;font-weight:800;margin-bottom:14px}
+.reward-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.reward-row:last-child{border-bottom:none}
+.reward-icon{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.reward-icon svg{width:16px;height:16px;stroke-width:2px}
+.reward-text{flex:1}
+.reward-name{font-size:.82rem;font-weight:600;margin-bottom:3px;color:var(--text)}
+.reward-cond{font-size:.7rem;font-weight:400;color:var(--text-dark);line-height:1.4}
+.reward-pts{font-family:var(--ff-d);font-size:.82rem;font-weight:800;color:var(--energy)}
+
+/* LEADERBOARD FULL */
+.lb-card{background:var(--bg2);border-radius:16px;padding:20px;border:1px solid var(--border);margin-bottom:14px}
+.lb-card-title{font-family:var(--ff-d);font-size:.95rem;font-weight:800;margin-bottom:14px}
+.lb-full-row{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;margin-bottom:8px;border:1px solid var(--border)}
+.lb-full-row.you{background:rgba(255,77,0,.06);border-color:rgba(255,77,0,.2)}
+.lb-full-row.top{background:rgba(255,206,0,.05);border-color:rgba(255,206,0,.15)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg2);border:1px solid var(--border);border-radius:100px;padding:12px 24px;font-size:.82rem;font-weight:600;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* CONFETTI */
+.cf-wrap{position:fixed;top:0;left:0;right:0;pointer-events:none;z-index:998;height:400px;overflow:hidden}
+.cf{position:absolute;animation:cfFall linear forwards}
+@keyframes cfFall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(420px) rotate(720deg);opacity:0}}
+
+/* ══ RESPONSIVE & PREMIUM LAYOUT STYLES ══ */
+.form-card, .stat-chip, .pos-card, .ref-card, .rewards-card, .lb-card, .lb-preview, .feature-item, .share-btn {
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+.form-card:hover, .pos-card:hover, .ref-card:hover, .rewards-card:hover, .lb-card:hover, .lb-preview:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 77, 0, 0.2);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4), 0 0 1px rgba(255, 77, 0, 0.15);
+}
+.stat-chip:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 77, 0, 0.3);
+}
+.feature-item {
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+}
+.feature-item:hover {
+  background: var(--dark2);
+  border-color: var(--border);
+  transform: translateX(4px);
+}
+.hero-main-layout, .success-main-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── TABLET BREAKPOINT (768px+) ── */
+@media (min-width: 768px) {
+  .hero-content, #p-success {
+    max-width: 720px;
+    padding: 36px 30px 60px;
+  }
+  .nav, .success-nav {
+    padding: 0 0 40px;
+  }
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .hero-glow {
+    width: 800px;
+    height: 800px;
+  }
+}
+
+/* ── DESKTOP BREAKPOINT (1024px+) ── */
+@media (min-width: 1024px) {
+  .hero-content, #p-success {
+    max-width: 1200px;
+    padding: 48px 40px 80px;
+  }
+  
+  /* Hero split-screen grid layout */
+  .hero-main-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    column-gap: 52px;
+    row-gap: 36px;
+    align-items: center;
+  }
+  .hero-left-block {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .form-card {
+    grid-column: 2;
+    grid-row: 1;
+    margin-bottom: 0;
+    padding: 32px;
+  }
+  .features-block {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .lb-preview {
+    grid-column: 2;
+    grid-row: 2;
+    margin-bottom: 0;
+  }
+  
+  /* Success split-screen grid layout */
+  .success-main-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    column-gap: 52px;
+    row-gap: 36px;
+    align-items: start;
+  }
+  .success-left-block {
+    grid-column: 1;
+  }
+  .success-right-block {
+    grid-column: 2;
+  }
+  
+  /* Fluid sizing adjustments for premium desktop display */
+  .hero-h1 {
+    font-size: 3.8rem;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    margin-bottom: 32px;
+    max-width: 500px;
+  }
+  .success-h1 {
+    font-size: 2.4rem;
+  }
+  
+  /* Balanced ambient visual glow positioning */
+  .hero-glow {
+    width: 1000px;
+    height: 1000px;
+    top: 20%;
+    left: 25%;
+  }
+  .hero-glow2 {
+    width: 500px;
+    height: 500px;
+    bottom: 5%;
+    right: 15%;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="hero-bg"></div>
+<div class="hero-grid"></div>
+<div class="hero-glow"></div>
+<div class="hero-glow2"></div>
+<div class="toast" id="toast"></div>
+<div class="cf-wrap" id="cf"></div>
+
+<!-- ══════════════════
+     HERO / JOIN PAGE
+══════════════════ -->
+<div class="page show" id="p-hero">
+  <div class="hero-content">
+
+    <!-- NAV -->
+    <div class="nav">
+      <div class="nav-logo">
+        <svg width="32" height="32" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:8px">
+          <rect width="90" height="90" rx="22" fill="#FF4D00"></rect>
+          <circle cx="45" cy="45" r="10" fill="white"></circle>
+          <circle cx="45" cy="45" r="5" fill="#FF4D00"></circle>
+          <line x1="45" y1="35" x2="45" y2="20" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"></line>
+          <line x1="55" y1="40" x2="68" y2="33" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"></line>
+          <line x1="55" y1="50" x2="68" y2="57" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"></line>
+          <line x1="45" y1="55" x2="45" y2="70" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"></line>
+          <line x1="35" y1="50" x2="22" y2="57" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"></line>
+          <line x1="35" y1="40" x2="22" y2="33" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"></line>
+          <circle cx="45" cy="20" r="3" fill="#FFCE00"></circle>
+          <circle cx="68" cy="33" r="3" fill="#FFCE00"></circle>
+          <circle cx="68" cy="57" r="3" fill="#FFCE00"></circle>
+          <circle cx="45" cy="70" r="3" fill="#FFCE00"></circle>
+          <circle cx="22" cy="57" r="3" fill="#1A1AFF"></circle>
+          <circle cx="22" cy="33" r="3" fill="#1A1AFF"></circle>
+        </svg>
+        CAMPUS<span>ONE</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Theme">
+          <i data-lucide="sun" class="sun-icon"></i>
+          <i data-lucide="moon" class="moon-icon"></i>
+        </button>
+        <div class="nav-counter">
+          <div class="live-dot"></div>
+          <span id="counter-num">2,847</span> joined
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO TEXT -->
+    <div class="hero-main-layout">
+      <div class="hero-left-block">
+        <div class="hero-pill"><i data-lucide="sparkles" style="width:14px;height:14px"></i> Pakistan's #1 Student Platform — Coming Soon!</div>
+        <h1 class="hero-h1">
+          Study. Compete.<br>
+          Earn. <span class="fire">Win.</span>
+        </h1>
+        <p class="hero-sub">
+          CAMPUSONE is Pakistan's first student superapp. Compete in quizzes & sports, sell your skills, find scholarships, and earn real cash — all in one place.
+        </p>
+
+        <!-- STATS -->
+        <div class="stats-row">
+          <div class="stat-chip">
+            <div class="stat-num" style="color:var(--fire)" id="stat-students">2,847</div>
+            <div class="stat-lbl">Waitlist</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-num" style="color:var(--energy)">Rs.500K+</div>
+            <div class="stat-lbl">Prize Pool</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-num" style="color:var(--success)">80+</div>
+            <div class="stat-lbl">Universities</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-num" style="color:#6e6eff">Free</div>
+            <div class="stat-lbl">To Join</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORM -->
+      <div class="form-card">
+        <div class="form-title"><i data-lucide="flame" style="width:16px;height:16px;color:var(--fire)"></i> Join the Waitlist</div>
+        <div class="form-sub">Early members get 500 FREE Campus Points on launch!</div>
+
+        <div class="input-wrap">
+          <input class="inp" id="f-name" placeholder="Full Name" type="text">
+          <i data-lucide="user" class="inp-icon"></i>
+        </div>
+        <div class="input-wrap">
+          <input class="inp" id="f-email" placeholder="Student Email" type="email">
+          <i data-lucide="mail" class="inp-icon"></i>
+        </div>
+
+        <button class="btn-join" onclick="joinWaitlist()">
+          Join Waitlist <i data-lucide="arrow-right" style="width:16px;height:16px"></i>
+        </button>
+        <div class="form-note">
+          Already <span id="form-counter">2,847</span> students joined · 
+          <span>No spam</span> · Launch notification only
+        </div>
+      </div>
+
+      <div class="features-block">
+        <!-- FEATURES -->
+        <div class="features-title"><i data-lucide="sparkles" style="width:16px;height:16px;color:var(--fire)"></i> What's Coming</div>
+        <div class="feature-item">
+          <div class="feat-icon" style="background:rgba(255,77,0,.12);color:var(--fire)"><i data-lucide="trophy"></i></div>
+          <div class="feat-text">
+            <div class="feat-name">Quiz & Sports Competitions</div>
+            <div class="feat-desc">Daily quizzes, monthly tournaments, sports events. Win real cash prizes up to Rs. 5,00,000!</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feat-icon" style="background:rgba(255,206,0,.12);color:var(--energy)"><i data-lucide="lightbulb"></i></div>
+          <div class="feat-text">
+            <div class="feat-name">Sell Your Skills</div>
+            <div class="feat-desc">Offer tutoring, design, coding & more. Earn directly from fellow students across Pakistan.</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feat-icon" style="background:rgba(26,26,255,.12);color:var(--electric)"><i data-lucide="shopping-cart"></i></div>
+          <div class="feat-text">
+            <div class="feat-name">Student Marketplace</div>
+            <div class="feat-desc">Buy and sell books, notes, calculators, and more — peer to peer across all campuses.</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feat-icon" style="background:rgba(0,200,100,.12);color:var(--success)"><i data-lucide="graduation-cap"></i></div>
+          <div class="feat-text">
+            <div class="feat-name">Scholarships Finder</div>
+            <div class="feat-desc">Get matched to scholarships from 80+ universities. Never miss a deadline again.</div>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feat-icon" style="background:rgba(230,57,149,.12);color:#e63995)"><i data-lucide="book-open"></i></div>
+          <div class="feat-text">
+            <div class="feat-name">CrashCourse</div>
+            <div class="feat-desc">MDCAT · ECAT · FSc preparation. Short videos, notes, and practice quizzes. Exam ready fast!</div>
+          </div>
+        </div>
+        <div class="feature-item" style="margin-bottom:24px">
+          <div class="feat-icon" style="background:rgba(255,206,0,.12);color:var(--energy)"><i data-lucide="zap"></i></div>
+          <div class="feat-text">
+            <div class="feat-name">Campus Points & Rewards</div>
+            <div class="feat-desc">Earn points for everything. Redeem for airtime, food vouchers, and real cash!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEADERBOARD PREVIEW -->
+      <div class="lb-preview">
+        <div class="lb-preview-title">🏅 Top Waitlist Members</div>
+        <div id="lb-preview-list"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════
+     SUCCESS PAGE
+══════════════════ -->
+<div class="page" id="p-success">
+  <div class="success-nav">
+    <div class="nav-logo">
+      <svg width="32" height="32" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:8px">
+        <rect width="90" height="90" rx="22" fill="#FF4D00"></rect>
+        <circle cx="45" cy="45" r="10" fill="white"></circle>
+        <circle cx="45" cy="45" r="5" fill="#FF4D00"></circle>
+        <line x1="45" y1="35" x2="45" y2="20" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"></line>
+        <line x1="55" y1="40" x2="68" y2="33" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"></line>
+        <line x1="55" y1="50" x2="68" y2="57" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"></line>
+        <line x1="45" y1="55" x2="45" y2="70" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"></line>
+        <line x1="35" y1="50" x2="22" y2="57" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"></line>
+        <line x1="35" y1="40" x2="22" y2="33" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"></line>
+        <circle cx="45" cy="20" r="3" fill="#FFCE00"></circle>
+        <circle cx="68" cy="33" r="3" fill="#FFCE00"></circle>
+        <circle cx="68" cy="57" r="3" fill="#FFCE00"></circle>
+        <circle cx="45" cy="70" r="3" fill="#FFCE00"></circle>
+        <circle cx="22" cy="57" r="3" fill="#1A1AFF"></circle>
+        <circle cx="22" cy="33" r="3" fill="#1A1AFF"></circle>
+      </svg>
+      CAMPUS<span>ONE</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Theme">
+        <i data-lucide="sun" class="sun-icon"></i>
+        <i data-lucide="moon" class="moon-icon"></i>
+      </button>
+      <div class="nav-counter">
+        <div class="live-dot"></div>
+        <span id="s-counter">2,847</span> joined
+      </div>
+    </div>
+  </div>
+
+  <div class="success-main-layout">
+    <div class="success-left-block">
+      <div class="success-hero">
+        <span class="success-icon" id="s-icon">🎉</span>
+        <h1 class="success-h1">You're In,<br><span id="s-firstname">Bhai</span>!</h1>
+        <p class="success-sub">Welcome to CAMPUSONE! You're officially on the waitlist. We'll notify you on launch day! 🚀</p>
+      </div>
+
+      <!-- POSITION CARD -->
+      <div class="pos-card">
+        <div class="pos-label">Your Waitlist Position</div>
+        <div class="pos-num" id="s-position">#2,848</div>
+        <div class="pos-sub">Move up by referring friends below! 👇</div>
+      </div>
+
+      <!-- REFERRAL CARD -->
+      <div class="ref-card">
+        <div class="ref-title">🎁 Refer Friends — Move Up!</div>
+        <div class="ref-sub">
+          Share your unique referral link. Every friend who joins moves you <strong style="color:var(--fire)">10 spots up</strong> the waitlist!
+        </div>
+        <div class="ref-link-box">
+          <div class="ref-link-text" id="ref-link-text">campusone.pk/join?ref=AHMED123</div>
+          <button class="ref-copy-btn" onclick="copyRef()">Copy 📋</button>
+        </div>
+        <div class="share-btns">
+          <div class="share-btn" onclick="shareWhatsApp()">
+            <i data-lucide="message-circle" style="width:16px;height:16px;color:#25D366"></i> WhatsApp
+          </div>
+          <div class="share-btn" onclick="shareTwitter()">
+            <i data-lucide="twitter" style="width:16px;height:16px;color:#1DA1F2"></i> Twitter/X
+          </div>
+          <div class="share-btn" onclick="shareInsta()">
+            <i data-lucide="instagram" style="width:16px;height:16px;color:#E1306C"></i> Instagram
+          </div>
+          <div class="share-btn" onclick="copyRef()">
+            <i data-lucide="link" style="width:16px;height:16px;color:var(--fire)"></i> Copy Link
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="success-right-block">
+      <!-- REWARDS -->
+      <div class="rewards-card">
+        <div class="rewards-title">⚡ Early Member Rewards</div>
+        <div class="reward-row">
+          <div class="reward-icon" style="background:rgba(255,77,0,.12);color:var(--fire)"><i data-lucide="gift"></i></div>
+          <div class="reward-text">
+            <div class="reward-name">Welcome Bonus</div>
+            <div class="reward-cond">Just for joining waitlist</div>
+          </div>
+          <div class="reward-pts">+500 pts</div>
+        </div>
+        <div class="reward-row">
+          <div class="reward-icon" style="background:rgba(255,206,0,.12);color:var(--energy)"><i data-lucide="users"></i></div>
+          <div class="reward-text">
+            <div class="reward-name">Refer 1 Friend</div>
+            <div class="reward-cond">Per successful referral</div>
+          </div>
+          <div class="reward-pts">+200 pts</div>
+        </div>
+        <div class="reward-row">
+          <div class="reward-icon" style="background:rgba(0,200,100,.12);color:var(--success)"><i data-lucide="trophy"></i></div>
+          <div class="reward-text">
+            <div class="reward-name">Refer 5 Friends</div>
+            <div class="reward-cond">Milestone bonus</div>
+          </div>
+          <div class="reward-pts">+1,500 pts</div>
+        </div>
+        <div class="reward-row">
+          <div class="reward-icon" style="background:rgba(26,26,255,.12);color:var(--electric)"><i data-lucide="crown"></i></div>
+          <div class="reward-text">
+            <div class="reward-name">Top 100 Waitlist</div>
+            <div class="reward-cond">Free Premium for 3 months</div>
+          </div>
+          <div class="reward-pts">FREE 🎉</div>
+        </div>
+        <div class="reward-row">
+          <div class="reward-icon" style="background:rgba(255,206,0,.12);color:var(--energy)"><i data-lucide="award"></i></div>
+          <div class="reward-text">
+            <div class="reward-name">#1 on Waitlist</div>
+            <div class="reward-cond">Free entry to first competition</div>
+          </div>
+          <div class="reward-pts">Rs.500 Free</div>
+        </div>
+      </div>
+
+      <!-- LEADERBOARD -->
+      <div class="lb-card">
+        <div class="lb-card-title">🏅 Waitlist Leaderboard</div>
+        <div id="lb-full-list"></div>
+      </div>
+
+      <!-- BACK BTN -->
+      <div style="text-align:center;margin-top:4px">
+        <button onclick="showPage('p-hero')" style="background:transparent;border:1px solid var(--border);border-radius:100px;padding:10px 24px;color:#555;font-family:var(--ff-b);font-size:.8rem;cursor:pointer">← Back to Home</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════
+// DATA & STATE
+// ══════════════════════════
+const KEY = 'co_waitlist';
+let wlData = JSON.parse(localStorage.getItem(KEY) || '{"users":[],"count":2847}');
+
+// Mock leaderboard data
+const mockLeaders = [
+  {name:'Ali Hassan',uni:'FAST University',refs:24,pos:1},
+  {name:'Fatima Ahmed',uni:'NUST Islamabad',refs:18,pos:2},
+  {name:'Usman Raza',uni:'LUMS Lahore',refs:15,pos:3},
+  {name:'Sara Khan',uni:'UET Lahore',refs:12,pos:4},
+  {name:'Hamza Malik',uni:'IBA Karachi',refs:9,pos:5},
+];
+
+let currentUser = null;
+
+// ══════════════════════════
+// THEME TOGGLE
+// ══════════════════════════
+(function initTheme() {
+  // 1. Read from localStorage; if absent, respect system preference
+  const stored = localStorage.getItem('co_theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const useDark = stored ? stored === 'dark' : prefersDark;
+  if (!useDark) document.body.classList.add('light-theme');
+
+  // 2. Respond to OS-level theme changes in real time (when no stored preference)
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('co_theme')) {
+      document.body.classList.toggle('light-theme', !e.matches);
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+  });
+})();
+
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light-theme');
+  localStorage.setItem('co_theme', isLight ? 'light' : 'dark');
+  // Re-render Lucide icons so sun/moon visibility classes re-apply
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+// ══════════════════════════
+// INIT
+// ══════════════════════════
+window.onload = function(){
+  updateCounters();
+  renderLeaderboardPreview();
+  
+  // Check if already registered
+  const saved = localStorage.getItem('co_me');
+  if(saved){
+    currentUser = JSON.parse(saved);
+  }
+  
+  // Auto increment counter simulation
+  setInterval(()=>{
+    if(Math.random() > 0.7){
+      wlData.count++;
+      updateCounters();
+    }
+  }, 4000);
+
+  // Initialize Lucide icons
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons();
+  }
+};
+
+function updateCounters(){
+  document.getElementById('counter-num').textContent = wlData.count.toLocaleString();
+  document.getElementById('stat-students').textContent = wlData.count.toLocaleString();
+  document.getElementById('form-counter').textContent = wlData.count.toLocaleString();
+  if(document.getElementById('s-counter'))
+    document.getElementById('s-counter').textContent = wlData.count.toLocaleString();
+}
+
+// ══════════════════════════
+// JOIN WAITLIST
+// ══════════════════════════
+function joinWaitlist(){
+  const name  = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+
+  if(!name){ toast('Apna naam likho! 👤'); return; }
+  if(!email || !email.includes('@')){ toast('Sahi email likho! ✉️'); return; }
+
+  // Check duplicate
+  const existing = wlData.users.find(u=>u.email===email);
+  if(existing){ toast('Ye email already registered hai! 😊'); return; }
+
+  // Generate referral code
+  const refCode = name.split(' ')[0].toUpperCase().replace(/[^A-Z]/g,'') + 
+                  Math.floor(Math.random()*900+100);
+  
+  wlData.count++;
+  const pos = wlData.count;
+  
+  // Auto-detect referral code from URL query parameter (e.g. ?ref=CODE)
+  const urlParams = new URLSearchParams(window.location.search);
+  const refParam = urlParams.get('ref') || '';
+  
+  const user = {
+    name, email,
+    phone: '',
+    uni: 'Student',
+    level: '',
+    refCode, pos,
+    refs: 0,
+    joinedAt: new Date().toISOString(),
+    referredBy: refParam || null
+  };
+  
+  wlData.users.push(user);
+  currentUser = user;
+  
+  localStorage.setItem(KEY, JSON.stringify(wlData));
+  localStorage.setItem('co_me', JSON.stringify(user));
+  
+  updateCounters();
+  const firstName = name.split(' ')[0];
+  toast(`You're in, ${firstName}! 🎉`);
+  confetti();
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-email').value = '';
+  document.getElementById('f-name').disabled = true;
+  document.getElementById('f-email').disabled = true;
+  document.querySelector('.btn-join').disabled = true;
+  document.querySelector('.btn-join').textContent = 'Thanks for joining!';
+}
+
+// ══════════════════════════
+// SUCCESS PAGE SETUP
+// ══════════════════════════
+function setupSuccessPage(){
+  if(!currentUser) return;
+  const firstName = currentUser.name.split(' ')[0];
+  document.getElementById('s-firstname').textContent = firstName;
+  document.getElementById('s-icon').textContent = '🎉';
+  document.getElementById('s-position').textContent = '#' + currentUser.pos.toLocaleString();
+  
+  const refLink = 'campusone.pk/join?ref=' + currentUser.refCode;
+  document.getElementById('ref-link-text').textContent = refLink;
+  
+  renderLeaderboardFull();
+}
+
+// ══════════════════════════
+// LEADERBOARDS
+// ══════════════════════════
+function renderLeaderboardPreview(){
+  const all = [...mockLeaders];
+  document.getElementById('lb-preview-list').innerHTML = all.slice(0,5).map((p,i)=>`
+    <div class="lb-row">
+      <div class="lb-rk" style="color:${i===0?'var(--energy)':i===1?'#aaa':i===2?'#cd7f32':'#555'}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</div>
+      <div class="lb-av" style="background:rgba(255,77,0,.1)">😊</div>
+      <div class="lb-nm">${p.name} <span style="font-size:.62rem;color:#555">· ${p.uni}</span></div>
+      <div class="lb-sc">${p.refs} referrals</div>
+    </div>`).join('');
+}
+
+function renderLeaderboardFull(){
+  const leaders = [...mockLeaders];
+  
+  // Add current user if registered
+  if(currentUser){
+    const existing = leaders.find(l=>l.name===currentUser.name);
+    if(!existing){
+      leaders.push({
+        name: currentUser.name + ' (You)',
+        uni: currentUser.uni,
+        refs: currentUser.refs || 0,
+        pos: currentUser.pos,
+        isYou: true
+      });
+    }
+  }
+  
+  leaders.sort((a,b)=>b.refs-a.refs);
+  
+  document.getElementById('lb-full-list').innerHTML = leaders.map((p,i)=>`
+    <div class="lb-full-row ${p.isYou?'you':i<3?'top':''}">
+      <div class="lb-rk" style="color:${i===0?'var(--energy)':i===1?'#aaa':i===2?'#cd7f32':'#555'};font-family:var(--ff-d);font-size:.9rem;font-weight:800;min-width:28px">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</div>
+      <div style="width:34px;height:34px;border-radius:50%;background:${p.isYou?'rgba(255,77,0,.15)':'rgba(255,255,255,.06)'};display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0">${p.isYou?'😊':'👤'}</div>
+      <div style="flex:1">
+        <div style="font-size:.78rem;font-weight:700;color:${p.isYou?'var(--fire)':'#fff'}">${p.name}</div>
+        <div style="font-size:.62rem;color:#555">${p.uni}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:var(--ff-d);font-size:.82rem;font-weight:800;color:${p.isYou?'var(--fire)':'var(--energy)'}">${p.refs}</div>
+        <div style="font-size:.6rem;color:#555">referrals</div>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════════════════════
+// SHARE FUNCTIONS
+// ══════════════════════════
+function copyRef(){
+  if(!currentUser){ toast('Pehle register karo!'); return; }
+  const link = 'campusone.pk/join?ref=' + currentUser.refCode;
+  
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(link).then(()=> toast('Link copy ho gaya! 📋'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = link; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('Link copy ho gaya! 📋');
+  }
+}
+
+function shareWhatsApp(){
+  if(!currentUser){ toast('Pehle register karo!'); return; }
+  const link = 'campusone.pk/join?ref=' + currentUser.refCode;
+  const msg = `🔥 CAMPUSONE Pakistan aa raha hai!\n\nPakistan ka #1 student app — Compete, Earn, Win!\n✅ Daily quizzes & competitions\n✅ Skill selling\n✅ Scholarships\n✅ Real cash prizes\n\nJoin the waitlist ab — FREE!\n👉 ${link}\n\nMera referral code: ${currentUser.refCode}`;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg), '_blank');
+  toast('WhatsApp kholne wala hai! 💬');
+}
+
+function shareTwitter(){
+  if(!currentUser){ toast('Pehle register karo!'); return; }
+  const link = 'campusone.pk/join?ref=' + currentUser.refCode;
+  const msg = `🔥 CAMPUSONE is coming to Pakistan!\n\nPakistan's first student superapp — compete, earn, win real cash!\n\nJoin the waitlist FREE 👇\n${link}\n\n#CAMPUSONE #Pakistan #StudentLife #MDCAT #ECAT`;
+  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(msg), '_blank');
+  toast('Twitter/X kholne wala hai! 🐦');
+}
+
+function shareInsta(){
+  if(!currentUser){ toast('Pehle register karo!'); return; }
+  copyRef();
+  toast('Link copy hua! Instagram story mein paste karo 📸');
+}
+
+// ══════════════════════════
+// PAGE NAVIGATION
+// ══════════════════════════
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  window.scrollTo(0,0);
+}
+
+// ══════════════════════════
+// TOAST
+// ══════════════════════════
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('show'),4000);
+}
+
+// ══════════════════════════
+// CONFETTI
+// ══════════════════════════
+function confetti(){
+  const c=document.getElementById('cf');
+  const cols=['#FF4D00','#FFCE00','#1A1AFF','#00C864','#FF3366','#fff'];
+  c.innerHTML='';
+  for(let i=0;i<80;i++){
+    const d=document.createElement('div');
+    d.className='cf';
+    d.style.cssText=`left:${Math.random()*100}%;background:${cols[~~(Math.random()*6)]};width:${Math.random()*10+4}px;height:${Math.random()*10+4}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${Math.random()*2+1}s;animation-delay:${Math.random()*0.8}s`;
+    c.appendChild(d);
+  }
+  setTimeout(()=>c.innerHTML='',4000);
+}
+</script>
+</body>
+</html>
