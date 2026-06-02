@@ -2,6 +2,12 @@
 // CAMPUSONE — Application Script
 // ══════════════════════════════════════════
 
+// ── SUPABASE CONFIG ──
+const SUPABASE_URL = 'https://qqklesmfqpujzxkkcyox.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxa2xlc21mcXB1anp4a2tjeW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzODIxMTIsImV4cCI6MjA5NTk1ODExMn0.dzaUZHvvk6opzj1VqCh-okCfDdlz4tGBtSiOqOaAgXo';
+let supabaseClient = null;
+
+
 // ── DATA & STATE ──
 const KEY = 'co_waitlist';
 let wlData = JSON.parse(localStorage.getItem(KEY) || '{"users":[],"count":2847}');
@@ -31,6 +37,16 @@ function toggleTheme() {
 
 // ── INITIALISATION ──
 window.onload = function () {
+  // Initialize Supabase client - library loaded via CDN exports to window.supabase
+  setTimeout(() => {
+    if (window.supabase && window.supabase.createClient) {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log('✓ Supabase initialized');
+    } else {
+      console.error('✗ Supabase library failed to load. Check CDN access.');
+    }
+  }, 100);
+
   updateCounters();
 
   // Restore session if already registered
@@ -77,11 +93,12 @@ function showInputError(inputId, errorId, message = null) {
 }
 
 // ── JOIN WAITLIST ──
-function joinWaitlist() {
+async function joinWaitlist() {
   clearInputErrors();
 
   const name  = document.getElementById('f-name').value.trim();
   const email = document.getElementById('f-email').value.trim();
+  const btn = document.querySelector('.btn-join');
   let hasError = false;
 
   if (!name) {
@@ -99,52 +116,62 @@ function joinWaitlist() {
 
   if (hasError) return;
 
-  // Duplicate check
-  const existing = wlData.users.find(u => u.email === email);
-  if (existing) {
-    showInputError('f-email', 'email-error', 'This email is already registered!');
+  // Set loading state
+  btn.disabled = true;
+  btn.textContent = 'Joining...';
+
+  // Check if Supabase is initialized
+  if (!supabaseClient) {
+    showInputError('f-email', 'email-error', 'Connection error. Please refresh the page.');
+    btn.disabled = false;
+    btn.textContent = 'Join Waitlist';
     return;
   }
 
-  // Generate referral code
-  const refCode = name.split(' ')[0].toUpperCase().replace(/[^A-Z]/g, '') +
-                  Math.floor(Math.random() * 900 + 100);
+  try {
+    // Insert into Supabase
+    const { error } = await supabaseClient
+      .from('waitlist')
+      .insert([{ name, email }]);
 
-  wlData.count++;
-  const pos = wlData.count;
+    if (error) {
+      // Handle unique constraint error (email already exists)
+      if (error.code === '23505') {
+        showInputError('f-email', 'email-error', 'This email is already registered!');
+      } else {
+        showInputError('f-email', 'email-error', 'Something went wrong. Please try again.');
+        console.error('Supabase error:', error);
+      }
+      btn.disabled = false;
+      btn.textContent = 'Join Waitlist';
+      return;
+    }
 
-  // Detect referral param from URL (e.g. ?ref=CODE)
-  const refParam = new URLSearchParams(window.location.search).get('ref') || null;
+    // Success: increment counter, save user, show confetti
+    wlData.count++;
+    const user = { name, email, joinedAt: new Date().toISOString() };
+    currentUser = user;
+    localStorage.setItem('co_me', JSON.stringify(user));
+    updateCounters();
 
-  const user = {
-    name, email,
-    refCode, pos,
-    refs: 0,
-    joinedAt: new Date().toISOString(),
-    referredBy: refParam
-  };
+    const firstName = name.split(' ')[0];
+    toast(`You're in, ${firstName}! 🎉`);
+    confetti();
 
-  wlData.users.push(user);
-  currentUser = user;
-
-  localStorage.setItem(KEY, JSON.stringify(wlData));
-  localStorage.setItem('co_me', JSON.stringify(user));
-
-  updateCounters();
-
-  const firstName = name.split(' ')[0];
-  toast(`You're in, ${firstName}! 🎉`);
-  confetti();
-
-  // Lock the form
-  clearInputErrors();
-  document.getElementById('f-name').value    = '';
-  document.getElementById('f-email').value   = '';
-  document.getElementById('f-name').disabled  = true;
-  document.getElementById('f-email').disabled = true;
-  const btn = document.querySelector('.btn-join');
-  btn.disabled    = true;
-  btn.textContent = 'Thanks for joining!';
+    // Lock the form
+    clearInputErrors();
+    document.getElementById('f-name').value    = '';
+    document.getElementById('f-email').value   = '';
+    document.getElementById('f-name').disabled  = true;
+    document.getElementById('f-email').disabled = true;
+    btn.disabled    = true;
+    btn.textContent = 'Thanks for joining!';
+  } catch (err) {
+    console.error('Join waitlist error:', err);
+    showInputError('f-email', 'email-error', 'Connection error. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Join Waitlist';
+  }
 }
 
 // Clear individual field errors while typing

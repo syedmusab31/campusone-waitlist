@@ -626,7 +626,7 @@ body {
     grid-template-columns: 1.2fr 1fr;
     column-gap: 52px;
     row-gap: 36px;
-    align-items: center;
+    align-items: start;
   }
 
   .hero-left-block {
