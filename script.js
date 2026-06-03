@@ -3,8 +3,8 @@
 // ══════════════════════════════════════════
 
 // ── SUPABASE CONFIG ──
-const SUPABASE_URL = 'https://qqklesmfqpujzxkkcyox.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxa2xlc21mcXB1anp4a2tjeW94Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzODIxMTIsImV4cCI6MjA5NTk1ODExMn0.dzaUZHvvk6opzj1VqCh-okCfDdlz4tGBtSiOqOaAgXo';
+const SUPABASE_URL = 'https://nzvvoiosudabwnmnysxh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56dnZvaW9zdWRhYndubW55c3hoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0OTg3NDgsImV4cCI6MjA5NjA3NDc0OH0.Nnay3GbeVAG719njHgmbYy6Pr2px641JM9_4moETL5w';
 let supabaseClient = null;
 
 
